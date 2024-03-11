@@ -14,8 +14,8 @@ from keras.callbacks import EarlyStopping, Callback
 
 os.chdir(os.path.split(os.path.realpath(__file__))[0])
 # 读取数据
-data0 = pd.read_csv('resid.csv')
-data0 = data0.iloc[:1000]
+data0 = pd.read_csv('resid_.csv')
+data0 = data0.iloc[:30000]
 
 window_size = 64
 batch_size = 32
