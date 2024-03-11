@@ -13,7 +13,7 @@ df=pd.read_csv("Wind Time Series Dataset(10min).csv")
 df['Time']=pd.to_datetime(df['Time'])
 df.set_index('Time',inplace=True)
  
-res = STL(df['Power'], period=24*6).fit()  #period确定：10分钟一个数据，以天为周期就是24*6
+res = STL(df['Power'], period=24*6*90).fit()  #period确定：10分钟一个数据，以天为周期就是24*6
 res.plot()
  
 df['trend']=res.trend
