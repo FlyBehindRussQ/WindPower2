@@ -7,9 +7,9 @@ original = original.iloc[:100]
 
 original_power = original['Power']
 
-# forecast_trend = pd.read_csv('forecast_trend.csv')
-# forecast_seasonal = pd.read_csv('forecast_seasonal.csv')
-# forecast_resid = pd.read_csv('forecast_resid')
+forecast_trend = pd.read_csv('forecast_trend.csv')
+forecast_seasonal = pd.read_csv('forecast_seasonal.csv')
+forecast_resid = pd.read_csv('forecast_resid')
 
 # mae = mean_absolute_error(y_test, y_predict)
 # mse = mean_squared_error(y_test, y_predict)

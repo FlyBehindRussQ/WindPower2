@@ -15,7 +15,7 @@ from keras.callbacks import EarlyStopping, Callback
 os.chdir(os.path.split(os.path.realpath(__file__))[0])
 # 读取数据
 data0 = pd.read_csv('resid_.csv')
-data0 = data0.iloc[:30000]
+data0 = data0.iloc[:1000]
 
 window_size = 64
 batch_size = 32
@@ -120,7 +120,7 @@ def plot_fit(y_test, y_pred,hist, imfname=''):
     plt.tight_layout()
 
     plt.show()
-
+    
 df_eval_all = pd.DataFrame(columns=['MAE', 'RMSE', 'MAPE', 'R2'])
 df_preds_all = pd.DataFrame()
 
@@ -166,3 +166,16 @@ train_fuc(mode='GRU', window_size=window_size, batch_size=batch_size, epochs=epo
 
 print("Is GPU available:", tf.test.is_gpu_available())
 print("GPU devices:", tf.config.list_physical_devices('GPU'))
+
+# 从原始数据的时间戳中选择与预测值数量相匹配的时间戳
+time_index = data0['TIME'].iloc[-len(df_preds_all):]
+
+# 创建一个新的 DataFrame 来保存时间信息和预测值
+df_predicted_with_time = pd.DataFrame(index=time_index)
+df_predicted_with_time['resid'] = df_preds_all['GRU'].values  # 假设 'GRU' 是包含预测值的列
+
+# 将 DataFrame 保存到 CSV 文件中
+df_predicted_with_time.to_csv('forecast_resid.csv')
+
+
+

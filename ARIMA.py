@@ -60,6 +60,8 @@ predictions_series_test = pd.Series(predictions_test, index=test.index)
 # 对预测数据进行线性插值填充缺失值
 predictions_series_test = predictions_series_test.interpolate(method='linear')
 
+predictions_series_test.to_csv('forecast_seasonal.csv')
+
 # 绘制测试集预测结果
 plt.plot(test.index, test['seasonal'], label='True (Test)')  # 使用日期时间索引和季节性数据列
 plt.plot(predictions_series_test.index, predictions_series_test, label='Predicted (Test) (Shifted)')
