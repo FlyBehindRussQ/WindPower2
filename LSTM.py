@@ -174,8 +174,18 @@ time_index = data0['TIME'].iloc[-len(df_preds_all):]
 df_predicted_with_time = pd.DataFrame(index=time_index)
 df_predicted_with_time['resid'] = df_preds_all['GRU'].values  # 假设 'GRU' 是包含预测值的列
 
-# 将 DataFrame 保存到 CSV 文件中
-df_predicted_with_time.to_csv('forecast_resid.csv')
+# 重命名列
+df_predicted_with_time_renamed = df_predicted_with_time.rename(columns={'resid': 'resid'})
+
+# 将DataFrame保存为CSV文件
+df_predicted_with_time_renamed.to_csv('forecast_resid.csv', index_label='Time')
+
+
+
+
+
+
+
 
 
 

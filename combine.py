@@ -9,13 +9,13 @@ original_power = original['Power']
 
 forecast_trend = pd.read_csv('forecast_trend.csv')
 forecast_seasonal = pd.read_csv('forecast_seasonal.csv')
-forecast_resid = pd.read_csv('forecast_resid')
+forecast_resid = pd.read_csv('forecast_resid.csv')
 
-# mae = mean_absolute_error(y_test, y_predict)
-# mse = mean_squared_error(y_test, y_predict)
-# rmse = np.sqrt(mean_squared_error(y_test, y_predict))
-# mape = (abs(y_predict - y_test) / y_test).mean()
-# r_2 = r2_score(y_test, y_predict)
+# 合并预测值数据并设置时间戳列为索引
+merged_forecast = pd.merge(forecast_trend, forecast_seasonal, on='Time', suffixes=('_trend', '_seasonal'))
+# merged_forecast = pd.merge(merged_forecast, forecast_resid, on='Time')
+
+print(merged_forecast)
 
 plt.figure(figsize=(12,8))
 plt.plot(original.Time,original_power,color = 'blue',label = 'Original')
