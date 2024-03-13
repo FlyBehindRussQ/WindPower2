@@ -11,10 +11,11 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from keras.models import Sequential
 from keras.layers import LSTM, Dense, Conv1D, Flatten, SimpleRNN, GRU
 from keras.callbacks import EarlyStopping, Callback
+import pytz
 
 os.chdir(os.path.split(os.path.realpath(__file__))[0])
 # 读取数据
-data0 = pd.read_csv('resid_.csv')
+data0 = pd.read_csv('resid_all.csv')
 data0 = data0.iloc[:1000]
 
 window_size = 64
@@ -179,6 +180,22 @@ df_predicted_with_time_renamed = df_predicted_with_time.rename(columns={'resid':
 
 # 将DataFrame保存为CSV文件
 df_predicted_with_time_renamed.to_csv('forecast_resid.csv', index_label='Time')
+
+# 读取CSV文件
+df = pd.read_csv('forecast_resid.csv')
+
+# 将时间戳列转换为时间格式
+df['Time'] = pd.to_datetime(df['Time'], unit='s') 
+
+# 将时区改为北京时间
+beijing_tz = pytz.timezone('Asia/Shanghai') 
+df['Time'] = df['Time'].dt.tz_localize('UTC').dt.tz_convert(beijing_tz)
+
+# 格式化时间并去除时区信息
+df['Time'] = df['Time'].dt.strftime('%Y-%m-%d %H:%M:%S')
+
+# 保存修改后的数据框到新的CSV文件
+df.to_csv('forecast_resid.csv', index=False)
 
 
 

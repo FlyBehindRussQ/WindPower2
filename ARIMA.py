@@ -10,6 +10,8 @@ df = df.iloc[:1000]
 df['Time'] = pd.to_datetime(df['Time'])  # 将时间列转换为日期时间类型
 df.set_index('Time', inplace=True)  # 将时间列设置为索引
 
+resid0 = pd.read_csv('forecast_trend.csv')
+
 # 绘制自相关函数（ACF）图
 plot_acf(df['seasonal'].dropna())
 plt.title('Autocorrelation Function (ACF)')
@@ -25,7 +27,7 @@ train_size = int(len(df) * 0.8)
 train, test = df[:train_size], df[train_size:]
 
 # 定义滑动窗口大小
-window_size = 10
+window_size = 20
 
 # 初始化预测结果列表
 predictions_test = []
@@ -37,7 +39,7 @@ for i in range(len(test)):
 
     # 拟合ARIMA模型
     try:
-        model = sm.tsa.arima.ARIMA(window_train['seasonal'], order=(1, 1, 1))  # 使用季节性数据列拟合模型
+        model = sm.tsa.arima.ARIMA(window_train['seasonal'], order=(3, 1, 3))  # 使用季节性数据列拟合模型
         arima_res = model.fit()
 
         # 预测下一个时间步
@@ -60,7 +62,8 @@ predictions_series_test = pd.Series(predictions_test, index=test.index)
 # 对预测数据进行线性插值填充缺失值
 predictions_series_test = predictions_series_test.interpolate(method='linear')
 
-predictions_series_test.to_csv('forecast_seasonal.csv')
+predictions_series_test.to_csv('forecast_seasonal.csv', header=['seasonal'])
+
 
 # 绘制测试集预测结果
 plt.plot(test.index, test['seasonal'], label='True (Test)')  # 使用日期时间索引和季节性数据列
