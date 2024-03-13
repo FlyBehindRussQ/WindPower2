@@ -1,5 +1,5 @@
 import os
-import math
+import pytz
 import time
 import random as rn
 import numpy as np
@@ -178,4 +178,18 @@ df_predicted_with_time['resid'] = df_preds_all['GRU'].values  # 假设 'GRU' 是
 df_predicted_with_time.to_csv('forecast_resid.csv')
 
 
+# 读取CSV文件
+df = pd.read_csv('forecast_resid.csv')
 
+# 将时间戳列转换为时间格式
+df['TIME'] = pd.to_datetime(df['TIME'], unit='s')  # 假设时间戳以秒为单位
+
+# 将时区改为北京时间
+beijing_tz = pytz.timezone('Asia/Shanghai')  # 北京时间的时区
+df['TIME'] = df['TIME'].dt.tz_localize('UTC').dt.tz_convert(beijing_tz)
+
+# 格式化时间并去除时区信息
+df['TIME'] = df['TIME'].dt.strftime('%Y-%m-%d %H:%M:%S')
+
+# 保存修改后的数据框到新的CSV文件
+df.to_csv('forecast_resid.csv', index=False)
